@@ -5,18 +5,18 @@ App = {
   init: function() {
     // Load pets.
     $.getJSON('../paintings.json', function(data) {
-      var petsRow = $('#petsRow');
-      var petTemplate = $('#petTemplate');
+      var paintingRow = $('#paintingRow');
+      var paintingTemplate = $('#paintingTemplate');
 
       for (i = 0; i < data.length; i ++) {
-        petTemplate.find('.panel-title').text(data[i].painter);
-        petTemplate.find('img').attr('src', data[i].picture);
-        petTemplate.find('.pet-breed').text(data[i].name);
-        petTemplate.find('.pet-age').text(data[i].year);
-        petTemplate.find('.pet-location').text(data[i].museum);
-        petTemplate.find('.btn-adopt').attr('data-id', data[i].id);
+        paintingTemplate.find('.panel-title').text(data[i].painter);
+        paintingTemplate.find('img').attr('src', data[i].picture);
+        paintingTemplate.find('.painting-name').text(data[i].name);
+        paintingTemplate.find('.painting-year').text(data[i].year);
+        paintingTemplate.find('.painting-museum').text(data[i].museum);
+        paintingTemplate.find('.btn-adopt').attr('data-id', data[i].id);
 
-        petsRow.append(petTemplate.html());
+        paintingRow.append(paintingTemplate.html());
       }
     });
 
