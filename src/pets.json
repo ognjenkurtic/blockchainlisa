@@ -3,32 +3,32 @@
     "id": 0,
     "painter": "Lucian Freud",
     "picture": "images/frojd.jpg",
-    "age": 3,
-    "breed": "Scottish Terrier",
-    "location": "Lisco, Alabama"
+    "year": 1985,
+    "name": "Reflection (Self-portrait)",
+    "museum": "Louvre, Paris"
   },
   {
     "id": 1,
     "painter": "Leonardo da Vinchi",
     "picture": "images/mona-lisa.jpg",
-    "age": 2,
-    "breed": "French Bulldog",
-    "location": "Freeburn, Idaho"
+    "year": 1505,
+    "name": "Mona Lisa",
+    "museum": "Louvre, Paris"
   },
   {
     "id": 2,
     "painter": "Ilya Repin",
     "picture": "images/diogen.jpg",
-    "age": 2,
-    "breed": "Boxer",
-    "location": "Camas, Pennsylvania"
+    "year": 1905,
+    "name": "Diogen",
+    "museum": "Louvre, Paris"
   },
   {
     "id": 3,
     "painter": "Edvard Munch",
     "picture": "images/scream.jpg",
-    "age": 3,
-    "breed": "Golden Retriever",
-    "location": "Soudan, Louisiana"
+    "year": 1893,
+    "name": "The Scream",
+    "museum": "Louvre, Paris"
   }
 ]
