@@ -1,7 +1,7 @@
 {
-  "name": "pet-shop",
+  "name": "blockchainlisa",
   "version": "1.0.0",
-  "description": "",
+  "description": "Artwork exchange distributed application",
   "main": "truffle.js",
   "directories": {
     "test": "test"
