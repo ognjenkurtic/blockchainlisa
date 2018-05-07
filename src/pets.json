@@ -1,7 +1,7 @@
 [
   {
     "id": 0,
-    "name": "Frieda",
+    "painter": "Lucian Freud",
     "picture": "images/frojd.jpg",
     "age": 3,
     "breed": "Scottish Terrier",
@@ -9,7 +9,7 @@
   },
   {
     "id": 1,
-    "name": "Collins",
+    "painter": "Leonardo da Vinchi",
     "picture": "images/mona-lisa.jpg",
     "age": 2,
     "breed": "French Bulldog",
@@ -17,7 +17,7 @@
   },
   {
     "id": 2,
-    "name": "Melissa",
+    "painter": "Ilya Repin",
     "picture": "images/diogen.jpg",
     "age": 2,
     "breed": "Boxer",
@@ -25,7 +25,7 @@
   },
   {
     "id": 3,
-    "name": "Latisha",
+    "painter": "Edvard Munch",
     "picture": "images/scream.jpg",
     "age": 3,
     "breed": "Golden Retriever",
