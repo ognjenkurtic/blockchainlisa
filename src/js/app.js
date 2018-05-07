@@ -14,7 +14,7 @@ App = {
         paintingTemplate.find('.painting-name').text(data[i].name);
         paintingTemplate.find('.painting-year').text(data[i].year);
         paintingTemplate.find('.painting-museum').text(data[i].museum);
-        paintingTemplate.find('.btn-adopt').attr('data-id', data[i].id);
+        paintingTemplate.find('.btn-lend').attr('data-id', data[i].id);
 
         paintingRow.append(paintingTemplate.html());
       }
@@ -51,7 +51,7 @@ App = {
   },
 
   bindEvents: function() {
-    $(document).on('click', '.btn-adopt', App.handleAdopt);
+    $(document).on('click', '.btn-lend', App.handleAdopt);
   },
 
   markAdopted: function(adopters, account) {
