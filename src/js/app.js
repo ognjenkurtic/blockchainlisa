@@ -14,7 +14,8 @@ App = {
         paintingTemplate.find('.painting-name').text(data[i].name);
         paintingTemplate.find('.painting-year').text(data[i].year);
         paintingTemplate.find('.painting-museum').text(data[i].museum);
-        paintingTemplate.find('.btn-lend').attr('data-id', data[i].id);
+        paintingTemplate.find('.museum-address').attr('id', "museum-address-"+data[i].id);
+        paintingTemplate.find('.btn-lend').attr('data-id', +data[i].id);
 
         paintingRow.append(paintingTemplate.html());
       }
@@ -76,7 +77,8 @@ App = {
     event.preventDefault();
 
     var petId = parseInt($(event.target).data('id'));
-
+    var museumAddress = $("#museum-address-"+petId).val();
+    console.log(museumAddress);
     var adoptionInstance;
 
     web3.eth.getAccounts(function (error, accounts) {
