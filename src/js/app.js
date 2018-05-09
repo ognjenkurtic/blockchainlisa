@@ -3,7 +3,7 @@ App = {
   contracts: {},
 
   init: function() {
-    // Load pets.
+    // Load paintings.
     $.getJSON('../paintings.json', function(data) {
       var paintingRow = $('#paintingRow');
       var paintingTemplate = $('#paintingTemplate');
@@ -36,16 +36,27 @@ App = {
   },
 
   initContract: function () {
-    $.getJSON('Adoption.json', function (data) {
+    // // $.getJSON('Adoption.json', function (data) {
+    // //   // Get the necessary contract artifact file and instantiate it with truffle-contract
+    // //   var AdoptionArtifact = data;
+    // //   App.contracts.Adoption = TruffleContract(AdoptionArtifact);
+
+    // //   // Set the provider for our contract
+    // //   App.contracts.Adoption.setProvider(App.web3Provider);
+
+    // //   // Use our contract to retrieve and mark the adopted pets
+    // //   return App.markAdopted();
+    // // });
+
+    $.getJSON('Museum.json', function (data) {
       // Get the necessary contract artifact file and instantiate it with truffle-contract
-      var AdoptionArtifact = data;
-      App.contracts.Adoption = TruffleContract(AdoptionArtifact);
+      var MuseumArtifact = data;
+      App.contracts.Museum = TruffleContract(MuseumArtifact);
 
       // Set the provider for our contract
-      App.contracts.Adoption.setProvider(App.web3Provider);
+      App.contracts.Museum.setProvider(App.web3Provider);
 
-      // Use our contract to retrieve and mark the adopted pets
-      return App.markAdopted();
+      return App.initCollection();
     });
 
     return App.bindEvents();
@@ -55,31 +66,49 @@ App = {
     $(document).on('click', '.btn-lend', App.handleAdopt);
   },
 
-  markAdopted: function(adopters, account) {
-    var adoptionInstance;
-    App.contracts.Adoption.deployed().then(function(instance){
-      adoptionInstance = instance;
+  initCollection: function(){
+    var museumInstance;
+    App.contracts.Museum.deployed().then(function(instance){
+      museumInstance = instance;
+      console.log("bla");
 
-      return adoptionInstance.getAdopters.call();
-
-    }).then(function(adopters){
-      for (i = 0; i < adopters.length; i++) {
-        if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
-          $('.panel-pet').eq(i).find('button').text('Success').attr('disabled', true);
-        }
-      }
-    }).catch(function(err) {
-      console.log(err.message);
+      return museumInstance.initCollection();
+    }).then(function(){
+      console.log("op op");
+      
+      return museumInstance.getAllArtworks.call();
+    }).then(function(artworks){
+      console.log(artworks);
     });
   },
+
+  // // markAdopted: function(adopters, account) {
+  // //   var adoptionInstance;
+  // //   App.contracts.Adoption.deployed().then(function(instance){
+  // //     adoptionInstance = instance;
+
+  // //     return adoptionInstance.getAdopters.call();
+
+  // //   }).then(function(adopters){
+  // //     for (i = 0; i < adopters.length; i++) {
+  // //       if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
+  // //         $('.panel-pet').eq(i).find('button').text('Success').attr('disabled', true);
+  // //       }
+  // //     }
+  // //   }).catch(function(err) {
+  // //     console.log(err.message);
+  // //   });
+  // // },
 
   handleAdopt: function (event) {
     event.preventDefault();
 
     var petId = parseInt($(event.target).data('id'));
     var museumAddress = $("#museum-address-"+petId).val();
-    console.log(museumAddress);
+
     var adoptionInstance;
+    var museumInstance;
+
 
     web3.eth.getAccounts(function (error, accounts) {
       if (error) {
@@ -88,16 +117,30 @@ App = {
 
       var account = accounts[0];
 
-      App.contracts.Adoption.deployed().then(function (instance) {
-        adoptionInstance = instance;
+      // // App.contracts.Adoption.deployed().then(function (instance) {
+      // //   adoptionInstance = instance;
 
-        // Execute adopt as a transaction by sending account
-        return adoptionInstance.adopt(petId, { from: account });
-      }).then(function (result) {
-        return App.markAdopted();
-      }).catch(function (err) {
-        console.log(err.message);
-      });
+      // //   // Execute adopt as a transaction by sending account
+      // //   return adoptionInstance.adopt(petId, { from: account });
+      // // }).then(function (result) {
+      // //   return App.markAdopted();
+      // // }).catch(function (err) {
+      // //   console.log(err.message);
+      // // });
+      App.contracts.Museum.deployed().then(function (instance) {
+          museumInstance = instance;
+  
+          // Execute adopt as a transaction by sending account
+          return museumInstance.lend(petId,museumAddress, { from: account });
+        }).then(function (result) {
+          console.log(result);
+        }).then(function(){
+          return museumInstance.getAllArtworks.call()
+        }).then(function(resp){
+          console.log(resp);
+        }).catch(function (err) {
+          console.log(err.message);
+        });
     });
 
   }
