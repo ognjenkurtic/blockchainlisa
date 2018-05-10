@@ -50,14 +50,17 @@ contract Museum {
         address owner = artworks[artworkId].owner;
         require(msg.sender == owner);
 
-        artworks.push(Artwork({
-            owner: msg.sender,
-            holder: holder,
-            state: ArtworkState.Offered
-        }));
-
         artworks[artworkId].holder = holder;
         artworks[artworkId].state = ArtworkState.Offered;
+
+        return 0;
+    }
+
+    function accept(uint artworkId) public returns (uint) {
+        address holder = artworks[artworkId].holder;
+        require(msg.sender == holder);
+
+        artworks[artworkId].state = ArtworkState.Lended;
 
         return 0;
     }
