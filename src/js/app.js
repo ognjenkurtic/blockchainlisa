@@ -100,11 +100,30 @@ App = {
   // //   });
   // // },
 
+  markOffered: function(artworkId) {
+    var museumInstance;
+    App.contracts.Museum.deployed().then(function(instance){
+      museumInstance = instance;
+
+      return museumInstance.getArtworkDetails.call(artworkId);
+
+    }).then(function(response){
+      // // for (i = 0; i < adopters.length; i++) {
+      // //   if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
+      // //     $('.panel-pet').eq(i).find('button').text('Success').attr('disabled', true);
+      // //   }
+      // // }
+      console.log("Offered: " + response);
+    }).catch(function(err) {
+      console.log(err.message);
+    });
+  },
+
   handleAdopt: function (event) {
     event.preventDefault();
 
-    var petId = parseInt($(event.target).data('id'));
-    var museumAddress = $("#museum-address-"+petId).val();
+    var artworkId = parseInt($(event.target).data('id'));
+    var museumAddress = $("#museum-address-"+artworkId).val();
 
     var adoptionInstance;
     var museumInstance;
@@ -131,12 +150,13 @@ App = {
           museumInstance = instance;
   
           // Execute adopt as a transaction by sending account
-          return museumInstance.lend(petId,museumAddress, { from: account });
+          return museumInstance.lend(artworkId,museumAddress, { from: account });
         }).then(function (result) {
           console.log(result);
         }).then(function(){
           return museumInstance.getAllArtworks.call()
         }).then(function(resp){
+          App.markOffered(artworkId);
           console.log(resp);
         }).catch(function (err) {
           console.log(err.message);
