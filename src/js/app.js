@@ -64,11 +64,15 @@ App = {
 
       return museumInstance.initCollection();
     }).then(function () {
-      console.log("op op");
-
+      for (let id = 0; id < 4; id++) {
+        museumInstance.getArtworkDetails.call(id).then(function(details){
+          console.log("details"+details);
+        });
+        
+      }
       return museumInstance.getAllArtworks.call();
     }).then(function (artworks) {
-      console.log(artworks);
+      console.log("all artworks" + artworks);
     });
   },
 
@@ -92,6 +96,7 @@ App = {
 
   getArtworkDetails: function (artworkId) {
     var museumInstance;
+    var detailsResponse;
     App.contracts.Museum.deployed().then(function (instance) {
       museumInstance = instance;
 
@@ -104,9 +109,11 @@ App = {
       // //   }
       // // }
       console.log("Offered: " + response);
+      detailsResponse = response;
     }).catch(function (err) {
       console.log(err.message);
     });
+    return detailsResponse;
   },
 
   acceptArtwork: function (event) {
