@@ -16,7 +16,9 @@ App = {
         paintingTemplate.find('.painting-museum').text(data[i].museum);
         paintingTemplate.find('.museum-address').attr('id', "museum-address-" + data[i].id);
         paintingTemplate.find('.btn-lend').attr('data-id', +data[i].id);
+        paintingTemplate.find('.btn-lend').attr('id',"lend-button-" +data[i].id);
         paintingTemplate.find('.btn-accept').attr('data-id', +data[i].id);
+        paintingTemplate.find('.btn-accept').attr('id', "accept-button-"+data[i].id);
 
         paintingRow.append(paintingTemplate.html());
       }
@@ -38,7 +40,6 @@ App = {
 
   initContract: function () {
     $.getJSON('Museum.json', function (data) {
-      // Get the necessary contract artifact file and instantiate it with truffle-contract
       var MuseumArtifact = data;
       App.contracts.Museum = TruffleContract(MuseumArtifact);
 
@@ -60,39 +61,38 @@ App = {
     var museumInstance;
     App.contracts.Museum.deployed().then(function (instance) {
       museumInstance = instance;
-      console.log("bla");
-
       return museumInstance.initCollection();
     }).then(function () {
+
+      web3.eth.getAccounts(function (error, accounts) {
+        if (error) {
+          console.log(error);
+        }
+  
+        var account = accounts[0];
       for (let id = 0; id < 4; id++) {
         museumInstance.getArtworkDetails.call(id).then(function(details){
           console.log("details"+details);
+          var lendButton = $('#lend-button-'+id);
+          var acceptButton = $('#accept-button-'+id);
+          var addressText = $('#museum-address-'+id);
+          
+          if(account != details[0]){
+            lendButton.remove();
+            addressText.remove();
+          }
+          if(account == details[0] && details[1] != 0){
+            lendButton.prop('disabled', true);
+            addressText.prop('disabled', true);
+          }
+          if(account != details[2]){
+            acceptButton.remove();
+          }
         });
-        
       }
-      return museumInstance.getAllArtworks.call();
-    }).then(function (artworks) {
-      console.log("all artworks" + artworks);
+    });
     });
   },
-
-  // // markAdopted: function(adopters, account) {
-  // //   var adoptionInstance;
-  // //   App.contracts.Adoption.deployed().then(function(instance){
-  // //     adoptionInstance = instance;
-
-  // //     return adoptionInstance.getAdopters.call();
-
-  // //   }).then(function(adopters){
-  // //     for (i = 0; i < adopters.length; i++) {
-  // //       if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
-  // //         $('.panel-pet').eq(i).find('button').text('Success').attr('disabled', true);
-  // //       }
-  // //     }
-  // //   }).catch(function(err) {
-  // //     console.log(err.message);
-  // //   });
-  // // },
 
   getArtworkDetails: function (artworkId) {
     var museumInstance;
@@ -103,11 +103,6 @@ App = {
       return museumInstance.getArtworkDetails.call(artworkId);
 
     }).then(function (response) {
-      // // for (i = 0; i < adopters.length; i++) {
-      // //   if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
-      // //     $('.panel-pet').eq(i).find('button').text('Success').attr('disabled', true);
-      // //   }
-      // // }
       console.log("Offered: " + response);
       detailsResponse = response;
     }).catch(function (err) {
@@ -134,11 +129,6 @@ App = {
         return museumInstance.accept(artworkId, { from: account });
      
     }).then(function (response) {
-      // // for (i = 0; i < adopters.length; i++) {
-      // //   if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
-      // //     $('.panel-pet').eq(i).find('button').text('Success').attr('disabled', true);
-      // //   }
-      // // }
       console.log("Accepted: " + response);
     }).catch(function (err) {
       console.log(err.message);
@@ -180,8 +170,6 @@ App = {
         return museumInstance.lend(artworkId, museumAddress, { from: account });
       }).then(function (result) {
         console.log(result);
-      }).then(function () {
-        return museumInstance.getAllArtworks.call()
       }).then(function (resp) {
         App.getArtworkDetails(artworkId);
         console.log(resp);

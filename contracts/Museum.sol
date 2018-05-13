@@ -65,10 +65,6 @@ contract Museum {
         return 0;
     }
 
-    function getAllArtworks() public view returns (address, address){
-        return (artworks[3].owner, artworks[3].holder); // can we return array of objects? 
-    }
-
     function getArtworkDetails(uint artworkId) public view returns (address, ArtworkState, address){
         return (artworks[artworkId].owner, artworks[artworkId].state, artworks[artworkId].holder);
     }
