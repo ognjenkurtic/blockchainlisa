@@ -14,6 +14,7 @@ App = {
         paintingTemplate.find('.painting-name').text(data[i].name);
         paintingTemplate.find('.painting-year').text(data[i].year);
         paintingTemplate.find('.painting-museum').text(data[i].museum);
+        paintingTemplate.find('.painting-location').attr('id', "artwork-location-" + data[i].id);
         paintingTemplate.find('.museum-address').attr('id', "museum-address-" + data[i].id);
         paintingTemplate.find('.btn-lend').attr('data-id', +data[i].id);
         paintingTemplate.find('.btn-lend').attr('id',"lend-button-" +data[i].id);
@@ -46,22 +47,29 @@ App = {
       // Set the provider for our contract
       App.contracts.Museum.setProvider(App.web3Provider);
 
-      return App.initCollection();
+      return App.initCollection(false);
     });
 
     return App.bindEvents();
   },
 
+  initBlockchain: function() {
+    return App.initCollection(true);
+  },
+
   bindEvents: function () {
     $(document).on('click', '.btn-lend', App.handleAdopt);
     $(document).on('click', '.btn-accept', App.acceptArtwork);
+    $(document).on('click', '.btn-init', App.initBlockchain);
   },
 
-  initCollection: function () {
+  initCollection: function (doInit) {
     var museumInstance;
     App.contracts.Museum.deployed().then(function (instance) {
       museumInstance = instance;
-      return museumInstance.initCollection();
+      if(doInit){
+        return museumInstance.initCollection();
+      }
     }).then(function () {
 
       web3.eth.getAccounts(function (error, accounts) {
@@ -76,6 +84,7 @@ App = {
           var lendButton = $('#lend-button-'+id);
           var acceptButton = $('#accept-button-'+id);
           var addressText = $('#museum-address-'+id);
+          var location = $('#artwork-location-'+id);
           
           if(account != details[0]){
             lendButton.remove();
@@ -85,9 +94,11 @@ App = {
             lendButton.prop('disabled', true);
             addressText.prop('disabled', true);
           }
-          if(account != details[2]){
+          if(account != details[2] || details[1] != 1){
             acceptButton.remove();
           }
+
+          location.text(details[2]);
         });
       }
     });
