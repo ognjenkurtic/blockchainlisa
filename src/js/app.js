@@ -3,6 +3,7 @@ App = {
   contracts: {},
 
   init: function () {
+    
     // Load paintings.
     $.getJSON('../paintings.json', function (data) {
       var paintingRow = $('#paintingRow');
@@ -153,7 +154,6 @@ App = {
     var artworkId = parseInt($(event.target).data('id'));
     var museumAddress = $("#museum-address-" + artworkId).val();
 
-    var adoptionInstance;
     var museumInstance;
 
 
@@ -163,17 +163,6 @@ App = {
       }
 
       var account = accounts[0];
-
-      // // App.contracts.Adoption.deployed().then(function (instance) {
-      // //   adoptionInstance = instance;
-
-      // //   // Execute adopt as a transaction by sending account
-      // //   return adoptionInstance.adopt(petId, { from: account });
-      // // }).then(function (result) {
-      // //   return App.markAdopted();
-      // // }).catch(function (err) {
-      // //   console.log(err.message);
-      // // });
       App.contracts.Museum.deployed().then(function (instance) {
         museumInstance = instance;
 
